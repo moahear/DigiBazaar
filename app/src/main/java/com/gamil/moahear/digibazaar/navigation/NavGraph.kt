@@ -6,13 +6,14 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.gamil.moahear.digibazaar.ui.screens.IntroScreen
 import com.gamil.moahear.digibazaar.utils.Constants
 
 @Composable
 fun SetUpNavGraph(navHostController: NavHostController) {
     NavHost(navController = navHostController, startDestination = Screen.IntroScreen.route) {
         composable(route = Screen.IntroScreen.route) {
-
+            IntroScreen()
         }
 
         composable(route = Screen.MainScreen.route) {

@@ -29,8 +29,7 @@ private val LightColorScheme = lightColorScheme(
 
     primary = BackgroundBlue,
     background = BackgroundMainWhite,
-    surface = BackgroundCard
-
+    secondary = BackgroundBlue,
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -67,12 +66,15 @@ fun DigiBazaarTheme(
 
             //Change status bar color on dark and light theme
             window.statusBarColor =
-                if (!darkTheme) BackgroundMainWhite.toArgb() else BackgroundMainBlack.toArgb()
+                    //if (!darkTheme) BackgroundMainWhite.toArgb() else BackgroundMainBlack.toArgb()
+                BackgroundBlue.toArgb()
+
             /*default color icon is white and not show
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme*/
 
             //Show black icon on white status bar and white icon on black status bar
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
 

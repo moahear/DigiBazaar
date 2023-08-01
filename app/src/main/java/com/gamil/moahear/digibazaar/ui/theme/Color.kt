@@ -13,9 +13,10 @@ val Pink40 = Color(0xFF7D5260)*/
 //endregion
 
 //region custom color
-val BackgroundMainWhite = Color(255,255,255,255)
-val BackgroundMainBlack = Color(0,0,0,255)
-val BackgroundSearch = Color(251,250,255)
-val BackgroundCard = Color(218,218,218)
-val BackgroundBlue = Color(9,121,223)
+val BackgroundMainWhite = Color(255, 255, 255, 255)
+val BackgroundMainBlack = Color(0, 0, 0, 255)
+val BackgroundSearch = Color(251, 250, 255)
+val BackgroundCard = Color(218, 218, 218)
+val BackgroundBlue = Color(9, 121, 223)
+val BackgroundBlueLight = Color(4, 169, 245, 255)
 //endregion
