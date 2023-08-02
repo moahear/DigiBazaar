@@ -1,6 +1,5 @@
 package com.gamil.moahear.digibazaar.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +35,6 @@ class SignUpViewModel:ViewModel() {
     }
 
     fun signUpUser() {
-        Log.i("0000", "signUpUser: ")
     }
 
 }

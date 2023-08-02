@@ -31,7 +31,13 @@ fun SetUpNavGraph(navHostController: NavHostController) {
         }
 
         composable(route = Screen.SignInScreen.route) {
-            SignInScreen()
+            SignInScreen() {
+                navHostController.navigate(it) {
+                    popUpTo(route = Screen.SignInScreen.route) {
+                        inclusive = true
+                    }
+                }
+            }
         }
 
         composable(route = Screen.SignUpScreen.route) {
