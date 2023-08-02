@@ -3,7 +3,6 @@ package com.gamil.moahear.digibazaar.ui.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -21,13 +20,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.gamil.moahear.digibazaar.R
+import com.gamil.moahear.digibazaar.navigation.Screen
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundBlue
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundBlueLight
-import com.gamil.moahear.digibazaar.ui.theme.BackgroundMainBlack
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundMainWhite
 
 @Composable
-fun IntroScreen() {
+fun IntroScreen(onNavigate: (String) -> Unit) {
     Image(
         modifier = Modifier
             .fillMaxSize()
@@ -46,16 +45,15 @@ fun IntroScreen() {
         Button(modifier = Modifier.fillMaxWidth(0.7f),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
             border = BorderStroke(width = 0.002.dp, color = BackgroundBlueLight),
-            onClick = { }) {
+            onClick = { onNavigate(Screen.SignUpScreen.route) }) {
             Text(
-                text = stringResource(R.string.sign_up), color = if (isSystemInDarkTheme())
-                    BackgroundMainBlack else BackgroundMainWhite
+                text = stringResource(R.string.sign_up), color = BackgroundMainWhite
             )
         }
         Button(modifier = Modifier.fillMaxWidth(0.7f),
             border = BorderStroke(width = 0.002.dp, color = BackgroundMainWhite),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-            onClick = { }) {
+            onClick = { onNavigate(Screen.SignInScreen.route) }) {
             Text(
                 text = stringResource(R.string.sign_in), color = BackgroundBlueLight
             )

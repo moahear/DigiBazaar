@@ -53,7 +53,8 @@ android {
 dependencies {
 
     implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    //default implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
     implementation("androidx.activity:activity-compose:1.7.2")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
@@ -73,8 +74,9 @@ dependencies {
     //Livedata state
     implementation("androidx.compose.runtime:runtime-livedata")
 
-    //
-    implementation("io.insert-koin:koin-android:${System.getProperty("koin_version")}")
+    //koin
+    implementation("io.insert-koin:koin-androidx-compose:${System.getProperty("koin_version")}")
+    implementation("io.insert-koin:koin-androidx-compose-navigation:${System.getProperty("koin_version")}")
 
     //Navigation compose
     implementation("androidx.navigation:navigation-compose:2.6.0")
@@ -113,5 +115,8 @@ dependencies {
 
     //System ui controller
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
+
+    //Other Icons
+    implementation ("androidx.compose.material:material-icons-extended")
 
 }
