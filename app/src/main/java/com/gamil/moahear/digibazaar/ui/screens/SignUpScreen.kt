@@ -1,5 +1,6 @@
 package com.gamil.moahear.digibazaar.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -66,8 +68,9 @@ import org.koin.compose.koinInject
 @Composable
 fun SignUpScreen(
     signUpViewModel: SignUpViewModel = koinInject(),
-    onNavigateSignIn: (String) -> Unit
+    onNavigate/*SignIn*/: (String) -> Unit
 ) {
+    val context = LocalContext.current
     Box {
         Image(
             modifier = Modifier
@@ -84,7 +87,16 @@ fun SignUpScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ImageTop()
-            MainCard(signUpViewModel, onNavigateSignIn) { signUpViewModel.signUpUser() }
+            MainCard(signUpViewModel, onNavigate/*SignIn*/) {
+
+                signUpViewModel.signUpUser {
+                    if (it == "success") {
+                        onNavigate/*SignIn*/(Screen.MainScreen.route)
+                    } else {
+                        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 }
@@ -162,9 +174,15 @@ fun MainCard(
                 labelText = "Confirm password",
                 hintText = "Enter confirm password",
                 onValueChange = signUpViewModel::setConfirmPassword
+
+
             )
 
-            Button(modifier = Modifier.padding(top = 28.dp, bottom = 8.dp), onClick = onSignUp) {
+            Button(modifier = Modifier.padding(top = 28.dp, bottom = 8.dp), onClick = {
+
+
+                onSignUp.invoke()
+            }) {
                 Text(modifier = Modifier.padding(8.dp), text = "Register Account")
             }
 
@@ -190,6 +208,8 @@ fun NormalTextField(
     value: String,
     imageVector: ImageVector,
     labelText: String,
+    /*supportingText: @Composable() (() -> Unit)? = null,
+    isError: Boolean = false,*/
     hintText: String, onValueChange: (String) -> Unit
 ) {
     OutlinedTextField(modifier = Modifier

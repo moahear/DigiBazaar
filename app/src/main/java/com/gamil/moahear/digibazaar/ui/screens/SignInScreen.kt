@@ -1,5 +1,6 @@
 package com.gamil.moahear.digibazaar.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -45,8 +47,9 @@ import org.koin.compose.koinInject
 @Composable
 fun SignInScreen(
     signInViewModel: SignInViewModel = koinInject(),
-    onNavigateSignIn: (String) -> Unit
+    onNavigate/*SignIn*/: (String) -> Unit
 ) {
+    val context = LocalContext.current
     Box {
         Image(
             modifier = Modifier
@@ -63,7 +66,15 @@ fun SignInScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ImageTop()
-            SingInCard(signInViewModel, onNavigateSignIn) { signInViewModel.signInUser() }
+            SingInCard(signInViewModel, onNavigate/*SignIn*/) {
+                signInViewModel.signInUser {
+                    if (it == "success") {
+                        onNavigate/*SignIn*/(Screen.MainScreen.route)
+                    } else {
+                        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 }
@@ -71,7 +82,7 @@ fun SignInScreen(
 @Composable
 fun SingInCard(
     signInViewModel: SignInViewModel,
-    onNavigateSignIn: (String) -> Unit,
+    onNavigate/*SignIn*/: (String) -> Unit,
     onSignUp: () -> Unit
 ) {
     val email by signInViewModel.email.collectAsStateWithLifecycle()
@@ -99,13 +110,15 @@ fun SingInCard(
                 value = email,
                 imageVector = Icons.Filled.Email,
                 labelText = stringResource(R.string.email_address),
-                hintText = stringResource(R.string.enter_your_email), onValueChange = signInViewModel::setEmail
+                hintText = stringResource(R.string.enter_your_email),
+                onValueChange = signInViewModel::setEmail
             )
             PasswordTextField(
                 value = password,
                 imageVector = Icons.Outlined.Lock,
                 labelText = stringResource(R.string.password),
-                hintText = stringResource(R.string.enter_password), onValueChange = signInViewModel::setPassword
+                hintText = stringResource(R.string.enter_password),
+                onValueChange = signInViewModel::setPassword
             )
 
 
@@ -122,7 +135,7 @@ fun SingInCard(
             ) {
                 Text(text = stringResource(R.string.don_t_have_an_account))
                 Spacer(modifier = Modifier.width(8.dp))
-                TextButton(onClick = { onNavigateSignIn(Screen.SignUpScreen.route) }) {
+                TextButton(onClick = { onNavigate(Screen.SignUpScreen.route) }) {
                     Text(text = stringResource(R.string.register_now), color = BackgroundBlue)
                 }
             }
