@@ -10,6 +10,8 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.gamil.moahear.digibazaar.ui.components.CategoryTop
+import com.gamil.moahear.digibazaar.ui.components.ImageAdvertising
+import com.gamil.moahear.digibazaar.ui.components.ProductSubject
 import com.gamil.moahear.digibazaar.ui.components.TopToolBar
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundMainWhite
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -21,9 +23,12 @@ fun MainScreen() {
     SideEffect {
         uiSystemUiController.setStatusBarColor(BackgroundMainWhite)
     }
-    Column(modifier= Modifier
-        .fillMaxSize()
-        .verticalScroll(state = rememberScrollState()).padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(state = rememberScrollState())
+            .padding(16.dp)
+    ) {
         TopToolBar()
         CategoryTop()
         ProductSubject()
@@ -33,19 +38,6 @@ fun MainScreen() {
         ProductSubject()
 
     }
-
-}
-
-
-
-@Composable
-fun ImageAdvertising() {
-
-}
-
-@Composable
-fun ProductSubject() {
-
 }
 
 
