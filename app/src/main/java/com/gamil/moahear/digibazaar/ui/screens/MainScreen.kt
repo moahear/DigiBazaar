@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.gamil.moahear.digibazaar.ui.components.CategoryTop
 import com.gamil.moahear.digibazaar.ui.components.TopToolBar
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundMainWhite
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -24,7 +25,7 @@ fun MainScreen() {
         .fillMaxSize()
         .verticalScroll(state = rememberScrollState()).padding(16.dp)) {
         TopToolBar()
-        Category()
+        CategoryTop()
         ProductSubject()
         ProductSubject()
         ImageAdvertising()
@@ -35,10 +36,7 @@ fun MainScreen() {
 
 }
 
-@Composable
-fun Category() {
 
-}
 
 @Composable
 fun ImageAdvertising() {

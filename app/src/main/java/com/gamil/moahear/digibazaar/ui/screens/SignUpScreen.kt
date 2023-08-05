@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.rounded.ShoppingBag
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -43,11 +44,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -60,6 +61,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gamil.moahear.digibazaar.R
 import com.gamil.moahear.digibazaar.navigation.Screen
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundBlue
+import com.gamil.moahear.digibazaar.ui.theme.BackgroundMainBlack
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundMainWhite
 import com.gamil.moahear.digibazaar.ui.theme.Shapes
 import com.gamil.moahear.digibazaar.viewmodel.SignUpViewModel
@@ -110,9 +112,10 @@ fun ImageTop() {
     ) {
         Image(
             modifier = Modifier
-                .padding(0.dp)
+                .padding(2.dp)
                 .background(BackgroundMainWhite),
-            painter = painterResource(id = R.drawable.img_top_sign_up),
+            imageVector = Icons.Rounded.ShoppingBag,
+            colorFilter = ColorFilter.tint(color = BackgroundMainBlack),
             contentScale = ContentScale.FillHeight,
             contentDescription = null
         )
