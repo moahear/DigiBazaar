@@ -25,7 +25,7 @@ import com.gamil.moahear.digibazaar.ui.theme.Shapes
 
 @Composable
 fun ProductSubject() {
-    Column(modifier = Modifier.padding(32.dp)) {
+    Column(modifier = Modifier.padding(top=32.dp)) {
         Text(
             modifier = Modifier.padding(start = 16.dp),
             text = "popular",
@@ -60,15 +60,15 @@ fun SubjectItem() {
             )
             Column(modifier = Modifier.padding(12.dp)) {
                 Text(
-                    text = "Test first",
+                    text = "SubjectItem first",
                     style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
                 )
                 Text(
                     modifier = Modifier.padding(top = 4.dp),
-                    text = "Test second",
+                    text = "SubjectItem second",
                     style = TextStyle(fontSize = 14.sp)
                 )
-                Text(text = "Test three", style = TextStyle(color = Color.Gray, fontSize = 12.sp))
+                Text(text = "SubjectItem three", style = TextStyle(color = Color.Gray, fontSize = 12.sp))
             }
         }
     }

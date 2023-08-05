@@ -25,7 +25,7 @@ import com.gamil.moahear.digibazaar.ui.theme.Shapes
 
 @Composable
 fun CategoryTop() {
-    LazyRow(modifier = Modifier.padding(16.dp), contentPadding = PaddingValues(end = 16.dp)) {
+    LazyRow(modifier = Modifier.padding(top=16.dp), contentPadding = PaddingValues(end = 16.dp)) {
         items(10) {
             CategoryItem()
         }
