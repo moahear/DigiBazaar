@@ -8,7 +8,7 @@ import com.google.gson.JsonObject
 class UserRepositoryImpl(
     private val dataStore: IDataStoreRepository,
     private val apiServices: ApiServices
-) : UserRepository {
+) : IUserRepository {
 
     override suspend fun signUp(name: String, userName: String, password: String): String {
         val jsonObject = JsonObject().apply {

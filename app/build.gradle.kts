@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -103,6 +104,7 @@ dependencies {
     implementation("androidx.room:room-runtime:${System.getProperty("room_version")}")
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:${System.getProperty("room_version")}")
+    kapt ("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.7.0")
     //ksp "androidx.room:room-compiler:$room_version"
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:${System.getProperty("room_version")}")

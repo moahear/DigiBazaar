@@ -1,6 +1,8 @@
 package com.gamil.moahear.digibazaar.data.source
 
 import com.gamil.moahear.digibazaar.data.model.LoginResponse
+import com.gamil.moahear.digibazaar.data.model.ProductsResponse
+import com.gamil.moahear.digibazaar.data.model.SliderPicsResponse
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Response
@@ -16,4 +18,9 @@ interface ApiServices {
 
     @GET("refreshToken")
      fun refreshToken(): Call<LoginResponse>
+
+     @GET("getProducts")
+     suspend fun getAllProducts():Response<ProductsResponse>
+     @GET("getSliderPics")
+     suspend fun getAllAds():Response<SliderPicsResponse>
 }

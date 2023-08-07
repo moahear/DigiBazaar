@@ -2,13 +2,13 @@ package com.gamil.moahear.digibazaar.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gamil.moahear.digibazaar.data.repository.user.UserRepository
+import com.gamil.moahear.digibazaar.data.repository.user.IUserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SignInViewModel(private val userRepository: UserRepository) : ViewModel() {
+class SignInViewModel(private val userRepository: IUserRepository) : ViewModel() {
     private var _email = MutableStateFlow("")
     val email: StateFlow<String>
         get() = _email.asStateFlow()

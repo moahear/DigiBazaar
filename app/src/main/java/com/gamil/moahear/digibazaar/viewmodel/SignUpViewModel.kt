@@ -2,13 +2,13 @@ package com.gamil.moahear.digibazaar.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gamil.moahear.digibazaar.data.repository.user.UserRepository
+import com.gamil.moahear.digibazaar.data.repository.user.IUserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() {
+class SignUpViewModel(private val userRepository: IUserRepository) : ViewModel() {
     private var _name = MutableStateFlow("")
     val name: StateFlow<String>
         get() = _name.asStateFlow()

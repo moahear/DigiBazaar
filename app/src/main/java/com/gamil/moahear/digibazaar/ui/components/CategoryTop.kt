@@ -18,22 +18,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.gamil.moahear.digibazaar.R
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundCard
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundMainWhite
 import com.gamil.moahear.digibazaar.ui.theme.Shapes
 
 @Composable
-fun CategoryTop() {
+fun CategoryTop(categories:List<Pair<String,Int>>) {
     LazyRow(modifier = Modifier.padding(top=16.dp), contentPadding = PaddingValues(end = 16.dp)) {
-        items(10) {
-            CategoryItem()
+        items(categories.size) {
+            CategoryItem(categories[it])
         }
     }
 }
 
 @Composable
-fun CategoryItem() {
+fun CategoryItem(categoryItem:Pair<String,Int>) {
     Column(modifier = Modifier
         .padding(start = 16.dp)
         .clickable {
@@ -47,12 +46,12 @@ fun CategoryItem() {
                 modifier = Modifier
                     .padding(16.dp)
                     .background(BackgroundMainWhite), painter = painterResource(
-                    id = R.drawable.img_bags_intro
+                    id = categoryItem.second
                 ), contentDescription = null
             )
         }
         Text(
-            modifier = Modifier.padding(4.dp), text = "salam mostafa",
+            modifier = Modifier.padding(4.dp), text = categoryItem.first,
             style = TextStyle(color = Color.Gray)
         )
     }
