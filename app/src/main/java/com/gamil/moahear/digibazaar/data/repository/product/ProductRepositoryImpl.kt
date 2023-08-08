@@ -6,7 +6,7 @@ import com.gamil.moahear.digibazaar.data.model.SliderPicsResponse
 import com.gamil.moahear.digibazaar.data.source.ApiServices
 
 class ProductRepositoryImpl(private val apiServices: ApiServices,private val productDao: ProductDao):IProductRepository {
-    override suspend fun getAllProducts(hasInternet:Boolean): List<ProductsResponse.Product> {
+    override suspend fun getAllProducts(hasInternet:Boolean) : List<ProductsResponse.Product> {
         if (hasInternet){
             //Get data from internet
             val data=apiServices.getAllProducts().body()

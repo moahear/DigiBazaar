@@ -9,13 +9,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gamil.moahear.digibazaar.ui.components.CategoryTop
-import com.gamil.moahear.digibazaar.ui.components.ImageAdvertising
-import com.gamil.moahear.digibazaar.ui.components.ProductSubject
+import com.gamil.moahear.digibazaar.ui.components.Products
 import com.gamil.moahear.digibazaar.ui.components.TopToolBar
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundBlue
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundMainWhite
@@ -48,12 +48,9 @@ fun MainScreen( mainViewModel : MainViewModel = koinInject(parameters = {
         }
         TopToolBar()
         CategoryTop(Constants.CATEGORIES)
-        ProductSubject()
-        ProductSubject()
-        ImageAdvertising()
-        ProductSubject()
-        ProductSubject()
-
+        val products by mainViewModel.products.collectAsStateWithLifecycle()
+        val ads by mainViewModel.ads.collectAsStateWithLifecycle()
+        Products(Constants.TAGS,products,ads)
     }
 }
 

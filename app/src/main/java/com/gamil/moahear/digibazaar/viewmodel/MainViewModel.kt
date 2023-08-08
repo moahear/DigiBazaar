@@ -7,21 +7,26 @@ import com.gamil.moahear.digibazaar.data.model.SliderPicsResponse
 import com.gamil.moahear.digibazaar.data.repository.product.IProductRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val productRepository: IProductRepository,isInternetConnected:Boolean): ViewModel() {
     private val _isShownProgressBar =MutableStateFlow(false)
-    val isShownProgressBar :MutableStateFlow<Boolean>
-        get() = _isShownProgressBar
+    val isShownProgressBar :StateFlow<Boolean>
+        get() = _isShownProgressBar.asStateFlow()
 
+    private val _products=MutableStateFlow<List<ProductsResponse.Product>>(emptyList())
+    val products :StateFlow<List<ProductsResponse.Product>>
+        get() = _products.asStateFlow()
+
+    private val _ads=MutableStateFlow<List<SliderPicsResponse.Ad>>(emptyList())
+    val ads : StateFlow<List<SliderPicsResponse.Ad>>
+        get() = _ads.asStateFlow()
     init {
         refreshAllDataFromInternet(isInternetConnected)
     }
 
-    private val products=MutableStateFlow<List<ProductsResponse.Product>>(emptyList())
-
-
-    private val ads=MutableStateFlow<List<SliderPicsResponse.Ad>>(emptyList())
     private fun refreshAllDataFromInternet(hasInternet:Boolean){
         viewModelScope.launch {
             if (hasInternet) _isShownProgressBar.value=true
@@ -37,7 +42,7 @@ class MainViewModel(private val productRepository: IProductRepository,isInternet
         }
     }
     private fun updateData(products:List<ProductsResponse.Product>, ads:List<SliderPicsResponse.Ad>){
-        this.products.value=products
-        this.ads.value=ads
+        _products.value=products
+        _ads.value=ads
     }
 }

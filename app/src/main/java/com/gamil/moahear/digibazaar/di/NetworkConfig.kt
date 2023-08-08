@@ -37,6 +37,7 @@ fun provideClient(timeout:Long,httpLoggingInterceptor: HttpLoggingInterceptor):O
     .writeTimeout(timeout,TimeUnit.SECONDS)
     .connectTimeout(timeout,TimeUnit.SECONDS)
     .retryOnConnectionFailure(true)
+    .pingInterval(3,TimeUnit.SECONDS)
     .build()
 
 fun provideRetrofit(baseUrl:String,client: OkHttpClient,gson: Gson):ApiServices=Retrofit.Builder()
