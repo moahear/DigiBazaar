@@ -7,8 +7,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.gamil.moahear.digibazaar.data.repository.TokenInMemory
+import com.gamil.moahear.digibazaar.ui.screens.CartScreen
+import com.gamil.moahear.digibazaar.ui.screens.CategoryScreen
 import com.gamil.moahear.digibazaar.ui.screens.IntroScreen
 import com.gamil.moahear.digibazaar.ui.screens.MainScreen
+import com.gamil.moahear.digibazaar.ui.screens.ProductScreen
+import com.gamil.moahear.digibazaar.ui.screens.ProfileScreen
 import com.gamil.moahear.digibazaar.ui.screens.SignInScreen
 import com.gamil.moahear.digibazaar.ui.screens.SignUpScreen
 import com.gamil.moahear.digibazaar.utils.Constants
@@ -23,7 +27,9 @@ fun SetUpNavGraph(navHostController: NavHostController) {
         }
         composable(route = Screen.MainScreen.route) {
             if (TokenInMemory.token != null) {
-                MainScreen()
+                MainScreen() {
+                    navHostController.navigate(it)
+                }
             } else {
                 IntroScreen() {
                     navHostController.navigate(it)
@@ -33,7 +39,7 @@ fun SetUpNavGraph(navHostController: NavHostController) {
         }
 
         composable(route = Screen.ProfileScreen.route) {
-
+            ProfileScreen()
         }
         composable(route = Screen.SignInScreen.route) {
             SignInScreen() {
@@ -55,7 +61,7 @@ fun SetUpNavGraph(navHostController: NavHostController) {
             }
         }
         composable(route = Screen.CartScreen.route) {
-
+            CartScreen()
         }
         composable(route = Screen.NoInternetScreen.route) {
 
@@ -64,12 +70,23 @@ fun SetUpNavGraph(navHostController: NavHostController) {
             arguments = listOf(
                 navArgument(Constants.KEY_CATEGORY_ARG) { type = NavType.StringType }
             )) {
-
+            it.arguments?.let { it1 ->
+                CategoryScreen(
+                    categoryName = it1.getString(Constants.KEY_CATEGORY_ARG, "").drop(1).dropLast(1)
+                ) { route ->
+                    navHostController.navigate(route)
+                }
+            }
         }
         composable(route = Screen.ProductScreen.withArgs(Constants.KEY_PRODUCT_ARG),
             arguments = listOf(
                 navArgument(Constants.KEY_PRODUCT_ARG) { type = NavType.StringType }
             )) {
+            ProductScreen() {
+                navHostController.navigate(it)
+            }
+
+
         }
     }
 }

@@ -23,10 +23,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.gamil.moahear.digibazaar.data.model.ProductsResponse
+import com.gamil.moahear.digibazaar.navigation.Screen
 import com.gamil.moahear.digibazaar.ui.theme.Shapes
 
 @Composable
-fun ProductSubject(subject: String, products: List<ProductsResponse.Product>) {
+fun ProductSubject(
+    subject: String,
+    products: List<ProductsResponse.Product>,
+    onProductClicked: (String) -> Unit
+) {
     Column(modifier = Modifier.padding(top = 32.dp)) {
         Text(
             modifier = Modifier.padding(start = 16.dp),
@@ -38,7 +43,7 @@ fun ProductSubject(subject: String, products: List<ProductsResponse.Product>) {
             contentPadding = PaddingValues(end = 16.dp)
         ) {
             items(products.size) {
-                SubjectItem(products[it])
+                SubjectItem(products[it], onProductClicked)
             }
         }
 
@@ -46,36 +51,35 @@ fun ProductSubject(subject: String, products: List<ProductsResponse.Product>) {
 }
 
 @Composable
-fun SubjectItem(product: ProductsResponse.Product) {
+fun SubjectItem(product: ProductsResponse.Product, onProductClicked: (String) -> Unit) {
     Card(
         modifier = Modifier
             .padding(start = 16.dp)
-            .clickable { },
+            .clickable { onProductClicked(Screen.ProductScreen.route + "/${product.productId}") },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = Shapes.medium
     ) {
         Column {
             /* val matrix = ColorMatrix()
              matrix.setToSaturation(25F)*/
-           /* val colorMatrix = floatArrayOf(
-                0f, 0f, 0f, 0f, 0f,
-                0f, 1f, 0f, 0f, 0f,
-                0f, 0f, 1f, 0f, 0f,
-                0f, 0f, 0f, 1f, 0f
-            )*/
-            val surfaceVariantColor=MaterialTheme.colorScheme.surfaceVariant
+            /* val colorMatrix = floatArrayOf(
+                 0f, 0f, 0f, 0f, 0f,
+                 0f, 1f, 0f, 0f, 0f,
+                 0f, 0f, 1f, 0f, 0f,
+                 0f, 0f, 0f, 1f, 0f
+             )*/
+            val surfaceVariantColor = MaterialTheme.colorScheme.surfaceVariant
             AsyncImage(
                 modifier = Modifier
                     .size(260.dp)
-                    .background(surfaceVariantColor)
-                ,
+                    .background(surfaceVariantColor),
                 colorFilter = ColorFilter.tint(
                     color = surfaceVariantColor,
                     blendMode = BlendMode.Darken
                 )
-                    /*.drawBehind {
-                        drawRect(surfaceVariantColor)
-                    }, ColorFilter.colorMatrix(ColorMatrix(colorMatrix))*/,
+                /*.drawBehind {
+                    drawRect(surfaceVariantColor)
+                }, ColorFilter.colorMatrix(ColorMatrix(colorMatrix))*/,
                 contentScale = ContentScale.Fit,
                 model = product.imgUrl,
                 contentDescription = null

@@ -18,28 +18,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import com.gamil.moahear.digibazaar.navigation.Screen
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundCard
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundMainWhite
 import com.gamil.moahear.digibazaar.ui.theme.Shapes
 
 @Composable
-fun CategoryTop(categories:List<Pair<String,Int>>) {
-    LazyRow(modifier = Modifier.padding(top=16.dp), contentPadding = PaddingValues(end = 16.dp)) {
-        items(categories.size,key = {
+fun CategoryTop(categories: List<Pair<String, Int>>, onCategoryClicked: (String) -> Unit) {
+    LazyRow(modifier = Modifier.padding(top = 16.dp), contentPadding = PaddingValues(end = 16.dp)) {
+        items(categories.size, key = {
             categories[it].first
         }) {
-            CategoryItem(categories[it])
+            CategoryItem(categoryItem = categories[it], onCategoryClicked = onCategoryClicked)
         }
     }
 }
 
 @Composable
-fun CategoryItem(categoryItem:Pair<String,Int>) {
-    Column(modifier = Modifier
-        .padding(start = 16.dp)
-        .clickable {
-
-        },
+fun CategoryItem(categoryItem: Pair<String, Int>, onCategoryClicked: (String) -> Unit) {
+    Column(
+        modifier = Modifier
+            .padding(start = 16.dp)
+            .clickable {
+                onCategoryClicked(Screen.CategoryScreen.withArgs(categoryItem.first))
+            },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

@@ -26,11 +26,12 @@ import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun MainScreen( mainViewModel : MainViewModel = koinInject(parameters = {
-    parametersOf(true)
-})) {
-
-    val context= LocalContext.current
+fun MainScreen(
+    mainViewModel: MainViewModel = koinInject(parameters = {
+        parametersOf(true)
+    }), onNavigate: (String) -> Unit
+) {
+    val context = LocalContext.current
     //Change status bar color
     val uiSystemUiController = rememberSystemUiController()
     SideEffect {
@@ -43,14 +44,20 @@ fun MainScreen( mainViewModel : MainViewModel = koinInject(parameters = {
             .padding(16.dp)
     ) {
 
-        if (mainViewModel.isShownProgressBar.collectAsStateWithLifecycle().value){
-            LinearProgressIndicator(modifier=Modifier.fillMaxWidth(), color = BackgroundBlue)
+        if (mainViewModel.isShownProgressBar.collectAsStateWithLifecycle().value) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth(), color = BackgroundBlue)
         }
-        TopToolBar()
-        CategoryTop(Constants.CATEGORIES)
+        TopToolBar() {
+            onNavigate(it)
+        }
+        CategoryTop(Constants.CATEGORIES) { category ->
+            onNavigate(category)
+        }
         val products by mainViewModel.products.collectAsStateWithLifecycle()
         val ads by mainViewModel.ads.collectAsStateWithLifecycle()
-        Products(Constants.TAGS,products,ads)
+        Products(Constants.TAGS, products, ads) { product ->
+            onNavigate(product)
+        }
     }
 }
 

@@ -10,10 +10,21 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.gamil.moahear.digibazaar.data.model.SliderPicsResponse
+import com.gamil.moahear.digibazaar.navigation.Screen
 import com.gamil.moahear.digibazaar.ui.theme.Shapes
 
 @Composable
-fun ImageAdvertising(ad:SliderPicsResponse.Ad) {
-        AsyncImage(modifier= Modifier.fillMaxWidth().padding(top = 32.dp, start = 16.dp).clip(shape = Shapes.medium).clickable {  },model = ad.imageURL, contentDescription = "", contentScale = ContentScale.FillWidth)
+fun ImageAdvertising(ad: SliderPicsResponse.Ad, onProductClicked: (String) -> Unit) {
+    AsyncImage(
+        modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 32.dp, start = 16.dp)
+                .clip(shape = Shapes.medium)
+                .clickable {
+                        onProductClicked(
+                                Screen.ProductScreen.route + "/${ad.productId}"
+                        )
+                }, model = ad.imageURL, contentDescription = "", contentScale = ContentScale.FillWidth
+    )
 
 }

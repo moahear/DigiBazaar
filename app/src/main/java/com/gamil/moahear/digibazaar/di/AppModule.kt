@@ -9,6 +9,7 @@ import com.gamil.moahear.digibazaar.data.repository.product.ProductRepositoryImp
 import com.gamil.moahear.digibazaar.data.repository.user.IUserRepository
 import com.gamil.moahear.digibazaar.data.repository.user.UserRepositoryImpl
 import com.gamil.moahear.digibazaar.utils.Constants
+import com.gamil.moahear.digibazaar.viewmodel.CategoryViewModel
 import com.gamil.moahear.digibazaar.viewmodel.MainViewModel
 import com.gamil.moahear.digibazaar.viewmodel.SignInViewModel
 import com.gamil.moahear.digibazaar.viewmodel.SignUpViewModel
@@ -31,6 +32,7 @@ val appModule = module {
     single { Room.databaseBuilder(androidContext(),AppDatabase::class.java, Constants.APP_DATABASE).allowMainThreadQueries().build() }
     single { ProductRepositoryImpl(get(),get<AppDatabase>().getDao()) } bind IProductRepository::class
     viewModel {(hasInternet:Boolean)-> MainViewModel(get(),hasInternet) }
+    viewModel { CategoryViewModel(get()) }
 
 
 }

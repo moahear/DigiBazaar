@@ -27,4 +27,8 @@ class ProductRepositoryImpl(private val apiServices: ApiServices,private val pro
     override suspend fun getAllAds(hasInternet:Boolean): List<SliderPicsResponse.Ad> {
           return apiServices.getAllAds().body()?.ads ?: listOf()
     }
+
+    override suspend fun getProductsByCategory(categoryName: String): List<ProductsResponse.Product> {
+        return productDao.getProductsByCategory(categoryName)
+    }
 }
