@@ -11,6 +11,7 @@ import com.gamil.moahear.digibazaar.data.repository.user.UserRepositoryImpl
 import com.gamil.moahear.digibazaar.utils.Constants
 import com.gamil.moahear.digibazaar.viewmodel.CategoryViewModel
 import com.gamil.moahear.digibazaar.viewmodel.MainViewModel
+import com.gamil.moahear.digibazaar.viewmodel.ProductViewModel
 import com.gamil.moahear.digibazaar.viewmodel.SignInViewModel
 import com.gamil.moahear.digibazaar.viewmodel.SignUpViewModel
 import org.koin.android.ext.koin.androidContext
@@ -26,13 +27,22 @@ val appModule = module {
     single { networkTimeout }
     single { provideGson() }
     single { provideInterceptor() }
-    single { provideClient(get(),get()) }
-    single { provideRetrofit(get(),get(),get()) }
-    single { UserRepositoryImpl(get(),get()) } bind IUserRepository::class
-    single { Room.databaseBuilder(androidContext(),AppDatabase::class.java, Constants.APP_DATABASE).allowMainThreadQueries().build() }
-    single { ProductRepositoryImpl(get(),get<AppDatabase>().getDao()) } bind IProductRepository::class
-    viewModel {(hasInternet:Boolean)-> MainViewModel(get(),hasInternet) }
+    single { provideClient(get(), get()) }
+    single { provideRetrofit(get(), get(), get()) }
+    single { UserRepositoryImpl(get(), get()) } bind IUserRepository::class
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, Constants.APP_DATABASE)
+            .allowMainThreadQueries().build()
+    }
+    single {
+        ProductRepositoryImpl(
+            get(),
+            get<AppDatabase>().getDao()
+        )
+    } bind IProductRepository::class
+    viewModel { (hasInternet: Boolean) -> MainViewModel(get(), hasInternet) }
     viewModel { CategoryViewModel(get()) }
+    viewModel { ProductViewModel(get()) }
 
 
 }

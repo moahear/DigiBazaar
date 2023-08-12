@@ -43,6 +43,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.ColorPainter
@@ -84,7 +86,8 @@ fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxSize(0.95f),
+                .fillMaxSize(0.95f)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -135,8 +138,7 @@ fun MainCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .verticalScroll(rememberScrollState()),
+            .padding(horizontal = 16.dp),
         colors = CardDefaults.cardColors(containerColor = BackgroundMainWhite),
         border = BorderStroke(width = 0.02.dp, color = Color.Black),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -159,6 +161,7 @@ fun MainCard(
 
             NormalTextField(
                 value = email,
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
                 imageVector = Icons.Filled.Email,
                 labelText = "Email Address",
                 hintText = "Enter your email", onValueChange = signUpViewModel::setEmail
@@ -211,13 +214,14 @@ fun NormalTextField(
     value: String,
     imageVector: ImageVector,
     labelText: String,
+    keyboardOptions: KeyboardOptions=KeyboardOptions.Default,
     /*supportingText: @Composable() (() -> Unit)? = null,
     isError: Boolean = false,*/
     hintText: String, onValueChange: (String) -> Unit
 ) {
     OutlinedTextField(modifier = Modifier
         .fillMaxWidth(0.9f)
-        .padding(12.dp), value = value, onValueChange = onValueChange, label = {
+        .padding(12.dp).focusRequester(FocusRequester()), value = value, onValueChange = onValueChange, label = {
         Text(text = labelText)
     }, singleLine = true, placeholder = { Text(text = hintText) }, shape = Shapes.medium,
         leadingIcon = {

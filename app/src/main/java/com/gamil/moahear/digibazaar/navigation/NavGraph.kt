@@ -20,11 +20,6 @@ import com.gamil.moahear.digibazaar.utils.Constants
 @Composable
 fun SetUpNavGraph(navHostController: NavHostController) {
     NavHost(navController = navHostController, startDestination = Screen.MainScreen.route) {
-        composable(route = Screen.IntroScreen.route) {
-            IntroScreen {
-                navHostController.navigate(it)
-            }
-        }
         composable(route = Screen.MainScreen.route) {
             if (TokenInMemory.token != null) {
                 MainScreen() {
@@ -44,7 +39,7 @@ fun SetUpNavGraph(navHostController: NavHostController) {
         composable(route = Screen.SignInScreen.route) {
             SignInScreen() {
                 navHostController.navigate(it) {
-                    popUpTo(route = Screen.SignInScreen.route) {
+                    popUpTo(route = Screen.MainScreen.route) {
                         inclusive = true
                     }
                 }
@@ -53,7 +48,7 @@ fun SetUpNavGraph(navHostController: NavHostController) {
         composable(route = Screen.SignUpScreen.route) {
             SignUpScreen() {
                 navHostController.navigate(it) {
-                    popUpTo(route = Screen.SignUpScreen.route) {
+                    popUpTo(route = Screen.MainScreen.route) {
                         inclusive = true
                     }
                 }
@@ -82,10 +77,21 @@ fun SetUpNavGraph(navHostController: NavHostController) {
             arguments = listOf(
                 navArgument(Constants.KEY_PRODUCT_ARG) { type = NavType.StringType }
             )) {
-            ProductScreen() {
-                navHostController.navigate(it)
-            }
+            it.arguments?.let { it1 ->
+                ProductScreen(
+                    productId = it1.getString(Constants.KEY_PRODUCT_ARG, "").dropLast(1).drop(1),
+                    onBackClicked = {
+                        navHostController.popBackStack()
+                    },
+                    onCartClicked = {
+                        //if  check internet
+                        navHostController.navigate(Screen.CartScreen.route)
+                        // else
 
+                    }) { route ->
+                    navHostController.navigate(route)
+                }
+            }
 
         }
     }

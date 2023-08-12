@@ -7,4 +7,5 @@ interface IProductRepository {
     suspend fun getAllProducts(hasInternet:Boolean):List<ProductsResponse.Product>
     suspend fun getAllAds(hasInternet:Boolean):List<SliderPicsResponse.Ad>
     suspend fun getProductsByCategory(categoryName:String):List<ProductsResponse.Product>
+    suspend fun getProductById(productId:String):ProductsResponse.Product
 }

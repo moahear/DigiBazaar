@@ -10,7 +10,6 @@ sealed class Screen(val route: String) {
     data object CartScreen: Screen(Constants.CART_SCREEN)
     data object SignUpScreen: Screen(Constants.SIGN_UP_SCREEN)
     data object SignInScreen: Screen(Constants.SIGN_IN_SCREEN)
-    data object IntroScreen: Screen(Constants.INTRO_SCREEN)
     data object NoInternetScreen: Screen(Constants.NO_INTERNET_SCREEN)
     fun withArgs(vararg args:Any):String{
         return buildString{

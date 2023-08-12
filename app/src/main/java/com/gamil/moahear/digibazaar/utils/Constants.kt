@@ -1,9 +1,9 @@
 package com.gamil.moahear.digibazaar.utils
 
 import com.gamil.moahear.digibazaar.R
+import com.gamil.moahear.digibazaar.data.model.ProductsResponse
 
 object Constants {
-    const val INTRO_SCREEN = "intro_screen"
     const val SIGN_IN_SCREEN = "sign_in_screen"
     const val SIGN_UP_SCREEN = "sign_up_screen"
     const val CART_SCREEN = "cart_screen"
@@ -36,5 +36,16 @@ object Constants {
         "Best Sellers",
         "Most Visited",
         "Highest Quality"
+    )
+    val PRODUCT_EMPTY = ProductsResponse.Product(
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
     )
 }

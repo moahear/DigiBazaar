@@ -22,7 +22,7 @@ fun ImageAdvertising(ad: SliderPicsResponse.Ad, onProductClicked: (String) -> Un
                 .clip(shape = Shapes.medium)
                 .clickable {
                         onProductClicked(
-                                Screen.ProductScreen.route + "/${ad.productId}"
+                                Screen.ProductScreen.withArgs(ad.productId)
                         )
                 }, model = ad.imageURL, contentDescription = "", contentScale = ContentScale.FillWidth
     )

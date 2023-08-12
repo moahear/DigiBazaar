@@ -13,9 +13,8 @@ interface ProductDao {
     @Query("SELECT * FROM PRODUCT_TABLE")
      fun getAll():List<ProductsResponse.Product>
     @Query("SELECT * FROM PRODUCT_TABLE WHERE productId =:productId ")
-     fun getById(productId:String):ProductsResponse.Product
+     fun getProductById(productId:String):ProductsResponse.Product
 
     @Query("SELECT * FROM PRODUCT_TABLE WHERE category =:productName ")
     fun getProductsByCategory(productName:String):List<ProductsResponse.Product>
-
 }

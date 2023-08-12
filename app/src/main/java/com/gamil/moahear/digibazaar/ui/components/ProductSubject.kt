@@ -55,7 +55,7 @@ fun SubjectItem(product: ProductsResponse.Product, onProductClicked: (String) ->
     Card(
         modifier = Modifier
             .padding(start = 16.dp)
-            .clickable { onProductClicked(Screen.ProductScreen.route + "/${product.productId}") },
+            .clickable { onProductClicked(Screen.ProductScreen.withArgs(product.productId)) },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = Shapes.medium
     ) {

@@ -7,15 +7,14 @@ plugins {
 
 android {
     namespace = "com.gamil.moahear.digibazaar"
-    compileSdk = 33
-
+    compileSdk = 34
     defaultConfig {
         applicationId = "com.gamil.moahear.digibazaar"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
 
+        versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -80,7 +79,7 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-compose-navigation:${System.getProperty("koin_version")}")
 
     //Navigation compose
-    implementation("androidx.navigation:navigation-compose:2.6.0")
+    implementation("androidx.navigation:navigation-compose:2.7.0")
 
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:${System.getProperty("retrofit_version")}")
