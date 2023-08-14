@@ -1,6 +1,7 @@
 package com.gamil.moahear.digibazaar.data.source
 
 import com.gamil.moahear.digibazaar.data.model.AddCommentResponse
+import com.gamil.moahear.digibazaar.data.model.CartResponse
 import com.gamil.moahear.digibazaar.data.model.CommentsResponse
 import com.gamil.moahear.digibazaar.data.model.LoginResponse
 import com.gamil.moahear.digibazaar.data.model.ProductsResponse
@@ -16,22 +17,32 @@ import retrofit2.http.POST
 
 interface ApiServices {
     @POST("signUp")
-    suspend fun signUp(@Body jsonObject: JsonObject):Response<LoginResponse>
+    suspend fun signUp(@Body jsonObject: JsonObject): Response<LoginResponse>
+
     @POST("signIn")
-    suspend fun signIn(@Body jsonObject: JsonObject):Response<LoginResponse>
+    suspend fun signIn(@Body jsonObject: JsonObject): Response<LoginResponse>
 
     @GET("refreshToken")
-     fun refreshToken(): Call<LoginResponse>
+    fun refreshToken(): Call<LoginResponse>
 
-     @GET("getProducts")
-     suspend fun getAllProducts():Response<ProductsResponse>
-     @GET("getSliderPics")
-     suspend fun getAllAds():Response<SliderPicsResponse>
+    @GET("getProducts")
+    suspend fun getAllProducts(): Response<ProductsResponse>
 
-     @FormUrlEncoded
-     @POST("getComments")
-     suspend fun getComments(@Field(value = "productId") productId:String):Response<CommentsResponse>
+    @GET("getSliderPics")
+    suspend fun getAllAds(): Response<SliderPicsResponse>
+
     @FormUrlEncoded
-     @POST("addNewComment")
-     suspend fun addComment(@Field(value = "productId") productId:String,@Field(value = "text") message:String):Response<AddCommentResponse>
+    @POST("getComments")
+    suspend fun getComments(@Field(value = "productId") productId: String): Response<CommentsResponse>
+
+    @FormUrlEncoded
+    @POST("addNewComment")
+    suspend fun addComment(
+        @Field(value = "productId") productId: String,
+        @Field(value = "text") message: String
+    ): Response<AddCommentResponse>
+
+    @FormUrlEncoded
+    @POST("addToCart")
+    suspend fun addToCart(@Field(value = "productId") productId: String): Response<CartResponse>
 }

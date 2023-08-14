@@ -4,6 +4,8 @@ import androidx.room.Room
 import com.gamil.moahear.digibazaar.data.datastore.DataStoreImpl
 import com.gamil.moahear.digibazaar.data.datastore.IDataStoreRepository
 import com.gamil.moahear.digibazaar.data.db.AppDatabase
+import com.gamil.moahear.digibazaar.data.repository.cart.CartRepositoryImpl
+import com.gamil.moahear.digibazaar.data.repository.cart.ICartRepository
 import com.gamil.moahear.digibazaar.data.repository.comment.CommentRepositoryImpl
 import com.gamil.moahear.digibazaar.data.repository.comment.ICommentRepository
 import com.gamil.moahear.digibazaar.data.repository.product.IProductRepository
@@ -42,11 +44,11 @@ val appModule = module {
             get<AppDatabase>().getDao()
         )
     } bind IProductRepository::class
-
     single { CommentRepositoryImpl(get()) } bind ICommentRepository::class
+    single { CartRepositoryImpl(get()) } bind ICartRepository::class
     viewModel { (hasInternet: Boolean) -> MainViewModel(get(), hasInternet) }
     viewModel { CategoryViewModel(get()) }
-    viewModel { ProductViewModel(get(),get()) }
+    viewModel { ProductViewModel(get(), get(), get()) }
 
 
 }
