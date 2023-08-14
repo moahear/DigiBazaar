@@ -1,41 +1,69 @@
 package com.gamil.moahear.digibazaar.ui.screens
 
 import android.annotation.SuppressLint
+import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Message
+import androidx.compose.material.icons.filled.ShoppingBasket
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.ShoppingCartCheckout
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.gamil.moahear.digibazaar.data.model.Comment
 import com.gamil.moahear.digibazaar.data.model.ProductsResponse
 import com.gamil.moahear.digibazaar.navigation.Screen
+import com.gamil.moahear.digibazaar.ui.theme.BackgroundBlueLight
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundMainWhite
 import com.gamil.moahear.digibazaar.ui.theme.Shapes
 import com.gamil.moahear.digibazaar.viewmodel.ProductViewModel
@@ -49,39 +77,295 @@ fun ProductScreen(
     onBackClicked: () -> Unit,
     onCartClicked: () -> Unit, onNavigate: (String) -> Unit
 ) {
-    productViewModel.getProduct(productId)
+    productViewModel.getProduct(productId, true)
+    val context = LocalContext.current
     val product by productViewModel.product.collectAsStateWithLifecycle()
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(state = rememberScrollState())
-                    .padding(bottom = 58.dp)
-            ) {
-                ProductToolbar(
-                    productName = "ssss",
-                    badgeNumber = 20,
-                    onCartClicked = onCartClicked,
-                    onBackClicked = onBackClicked
-                )
-                ProductItem(
-                   product,
-                    onCategoryClicked = {
-                        onNavigate(Screen.CategoryScreen.withArgs(it))
-                    })
+    val comments by productViewModel.comments.collectAsStateWithLifecycle()
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(state = rememberScrollState())
+                .padding(bottom = 58.dp)
+        ) {
+            ProductToolbar(
+                productName = product.name,
+                badgeNumber = 20,
+                onCartClicked = onCartClicked,
+                onBackClicked = onBackClicked
+            )
+            ProductItem(
+                product,
+                comments = comments.sortedByDescending {
+                    it.commentId.toInt()
+                },
+                onAddComment = {
+                    productViewModel.addComment(productId, it) { result ->
+                        Toast.makeText(context, result, Toast.LENGTH_LONG).show()
+                    }
+                },
+                onCategoryClicked = {
+                    onNavigate(Screen.CategoryScreen.withArgs(it))
+                })
 
-            }
-            AddToCart()
         }
+        AddToCart()
+    }
 }
 
 
 @Composable
-fun ProductItem(product: ProductsResponse.Product, onCategoryClicked: (String) -> Unit) {
+fun ProductItem(
+    product: ProductsResponse.Product,
+    comments: List<Comment>,
+    onAddComment: (String) -> Unit,
+    onCategoryClicked: (String) -> Unit
+) {
     Column(modifier = Modifier.padding(16.dp)) {
+
         ProductDetails(product = product, onCategoryClicked = onCategoryClicked)
+        Divider(
+            modifier = Modifier
+                .padding(top = 14.dp, bottom = 14.dp)
+                .fillMaxWidth(), color = Color.LightGray, thickness = 1.dp
+        )
+        ProductExtraInfo(product, comments.size.toString())
+        Divider(
+            modifier = Modifier
+                .padding(top = 14.dp, bottom = 4.dp)
+                .fillMaxWidth(), color = Color.LightGray, thickness = 1.dp
+        )
+        ProductComments(comments, onAddComment)
     }
 }
+
+@Composable
+fun ProductComments(comments: List<Comment>, onAddComment: (String) -> Unit) {
+    var isShowingDialog by remember {
+        mutableStateOf(false)
+    }
+    val context = LocalContext.current
+    if (comments.isNotEmpty()) {
+        Column {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Comments",
+                    style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                )
+                TextButton(onClick = {
+                    //check internet later
+                    isShowingDialog = true
+                    //if not internet show message
+
+                }) {
+                    Text(
+                        text = "Add new comment",
+                        style = TextStyle(fontSize = 14.sp, color = BackgroundBlueLight)
+                    )
+                }
+            }
+        }
+        comments.forEach {
+            ProductComment(comment = it)
+        }
+        /*LazyColumn() {
+            items(comments.size, key = {
+                comments[it].commentId
+            }) {
+                ProductComment(comment = comments[it])
+            }
+        }*/
+    } else {
+        TextButton(onClick = {
+            //check internet later
+            isShowingDialog = true
+            //if not internet show message
+
+        }) {
+            Text(
+                text = "Add new comment",
+                style = TextStyle(fontSize = 14.sp, color = BackgroundBlueLight)
+            )
+        }
+    }
+    if (isShowingDialog) {
+        AddCommentDialog(onDismiss = {
+            isShowingDialog = false
+        }, onOK = {
+            onAddComment(it)
+        })
+    }
+}
+
+@Composable
+fun AddCommentDialog(onDismiss: () -> Unit, onOK: (String) -> Unit) {
+    val context = LocalContext.current
+    var comment by remember {
+        mutableStateOf("")
+    }
+    Dialog(onDismissRequest = onDismiss) {
+        Card(
+            modifier = Modifier.wrapContentHeight(),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            shape = Shapes.medium
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .wrapContentHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    text = "Write comments",
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                TextField(value = comment, placeholder = {
+                    Text(text = "Write your comment")
+                }, onValueChange = {
+                    comment = it
+                }, label = {
+                    Text(text = "comment")
+                }, shape = Shapes.medium)
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(modifier = Modifier.padding(end = 16.dp), onClick = onDismiss) {
+                        Text(
+                            text = "Cancel",
+                            style = TextStyle(
+                                color = BackgroundBlueLight,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    }
+                    TextButton(onClick = {
+                        if (comment.isNotEmpty() && comment.isNotBlank()) {
+                            //check internet
+                            onOK(comment)
+                            onDismiss.invoke()
+                        } else {
+                            //show message
+                        }
+                    }) {
+                        Text(
+                            text = "Ok",
+                            style = TextStyle(
+                                color = BackgroundBlueLight,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+
+@Composable
+fun ProductComment(comment: Comment) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp),
+        colors = CardDefaults.cardColors(containerColor = BackgroundMainWhite),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = BorderStroke(width = 1.dp, color = Color.LightGray),
+        shape = Shapes.large
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(
+                text = comment.userEmail,
+                style = TextStyle(fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            )
+            Text(text = comment.text, style = TextStyle(fontSize = 14.sp))
+        }
+    }
+}
+
+@Composable
+fun ProductExtraInfo(product: ProductsResponse.Product, commentNumber: String) {
+    Column {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Image(
+                modifier = Modifier.background(BackgroundBlueLight),
+                imageVector = Icons.Default.Message,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(BackgroundMainWhite)
+            )
+            Text(
+                modifier = Modifier.padding(start = 6.dp),
+                text = "$commentNumber Comments",
+                fontSize = 13.sp
+            )
+        }
+
+
+        Row(
+            modifier = Modifier.padding(top = 6.dp, bottom = 5.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                modifier = Modifier.background(BackgroundBlueLight),
+                imageVector = Icons.Default.ShoppingBasket,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(BackgroundMainWhite)
+            )
+            Text(
+                modifier = Modifier.padding(start = 6.dp),
+                text = product.material,
+                fontSize = 13.sp
+            )
+        }
+
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    modifier = Modifier.background(BackgroundBlueLight),
+                    imageVector = Icons.Default.ShoppingCartCheckout,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(BackgroundMainWhite)
+                )
+                Text(
+                    modifier = Modifier.padding(start = 6.dp),
+                    text = "${product.soldItem} Sold",
+                    fontSize = 13.sp
+                )
+            }
+
+            Text(
+                modifier = Modifier
+                    .clip(shape = Shapes.small)
+                    .background(BackgroundBlueLight)
+                    .padding(4.dp),
+                text = product.tags,
+                color = BackgroundMainWhite,
+                style = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Medium)
+            )
+        }
+    }
+}
+
 
 @Composable
 fun ProductDetails(product: ProductsResponse.Product, onCategoryClicked: (String) -> Unit) {
