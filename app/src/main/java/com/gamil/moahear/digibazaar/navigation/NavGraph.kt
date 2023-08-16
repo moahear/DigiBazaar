@@ -1,6 +1,5 @@
 package com.gamil.moahear.digibazaar.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -35,7 +34,13 @@ fun SetUpNavGraph(navHostController: NavHostController) {
         }
 
         composable(route = Screen.ProfileScreen.route) {
-            ProfileScreen()
+            ProfileScreen(onBackClickListener = { navHostController.popBackStack() }) {
+                navHostController.navigate(it) {
+                    popUpTo(it) {
+                        inclusive = true
+                    }
+                }
+            }
         }
         composable(route = Screen.SignInScreen.route) {
             SignInScreen() {

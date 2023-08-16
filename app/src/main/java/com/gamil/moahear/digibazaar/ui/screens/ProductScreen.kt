@@ -32,10 +32,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Message
 import androidx.compose.material.icons.filled.ShoppingBasket
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.ShoppingCartCheckout
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -76,11 +73,13 @@ import com.gamil.moahear.digibazaar.R
 import com.gamil.moahear.digibazaar.data.model.Comment
 import com.gamil.moahear.digibazaar.data.model.ProductsResponse
 import com.gamil.moahear.digibazaar.navigation.Screen
+import com.gamil.moahear.digibazaar.ui.components.BadgeNumberCart
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundAddToCart
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundBlueLight
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundMainBlack
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundMainWhite
 import com.gamil.moahear.digibazaar.ui.theme.Shapes
+import com.gamil.moahear.digibazaar.utils.separateDigit
 import com.gamil.moahear.digibazaar.viewmodel.ProductViewModel
 import org.koin.compose.koinInject
 
@@ -96,6 +95,7 @@ fun ProductScreen(
     val context = LocalContext.current
     val product by productViewModel.product.collectAsStateWithLifecycle()
     val comments by productViewModel.comments.collectAsStateWithLifecycle()
+    val badgeNumber by productViewModel.badgeNumber.collectAsStateWithLifecycle()
     val isShowAddingToCartAnimation by productViewModel.isShowAddingToCartAnimation.collectAsStateWithLifecycle()
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
         Column(
@@ -106,7 +106,7 @@ fun ProductScreen(
         ) {
             ProductToolbar(
                 productName = product.name,
-                badgeNumber = 20,
+                badgeNumber = badgeNumber,
                 onCartClicked = onCartClicked,
                 onBackClicked = onBackClicked
             )
@@ -164,7 +164,6 @@ fun ProductComments(comments: List<Comment>, onAddComment: (String) -> Unit) {
     var isShowingDialog by remember {
         mutableStateOf(false)
     }
-    val context = LocalContext.current
     if (comments.isNotEmpty()) {
         Column {
             Row(
@@ -223,7 +222,6 @@ fun ProductComments(comments: List<Comment>, onAddComment: (String) -> Unit) {
 
 @Composable
 fun AddCommentDialog(onDismiss: () -> Unit, onOK: (String) -> Unit) {
-    val context = LocalContext.current
     var comment by remember {
         mutableStateOf("")
     }
@@ -429,26 +427,7 @@ fun ProductToolbar(
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
         }
     }, colors = TopAppBarDefaults.topAppBarColors(BackgroundMainWhite), actions = {
-
-        IconButton(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxSize(0.2f),
-            onClick = onCartClicked
-        ) {
-            if (badgeNumber == 0) Icon(
-                imageVector = Icons.Default.ShoppingCart,
-                contentDescription = null
-            )
-            else
-                BadgedBox(badge = {
-                    Badge(modifier = Modifier.padding(top = 12.dp)) {
-                        Text(text = badgeNumber.toString())
-                    }
-                }) {
-                    Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = null)
-                }
-        }
+        BadgeNumberCart(badgeNumber, onCartClicked)
     }
     )
 }
@@ -496,7 +475,7 @@ fun AddToCart(price: String, isShowAddingToCartAnimation: Boolean, onAddToCart: 
                     .clip(shape = Shapes.medium)
                     .background(BackgroundAddToCart)
                     .padding(horizontal = 8.dp, vertical = 6.dp),
-                text = "$price Tomans",
+                text = separateDigit(price),
                 style = TextStyle(
                     fontSize = 14.sp,
                     color = BackgroundMainBlack,

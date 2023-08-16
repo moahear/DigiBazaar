@@ -32,12 +32,16 @@ class ProductViewModel(
     val isShowAddingToCartAnimation: StateFlow<Boolean>
         get() = _isShowAddingToCartAnimation.asStateFlow()
 
+    private val _badgeNumber=MutableStateFlow(0)
+    val badgeNumber:StateFlow<Int>
+        get() = _badgeNumber.asStateFlow()
 
     fun getProduct(productId: String, hasInternet: Boolean) {
         getProductFromCache(productId)
         if (hasInternet) {
             getComments(productId)
         }
+        getBadgeNumber()
     }
 
     private fun getProductFromCache(productId: String) {
@@ -72,6 +76,12 @@ class ProductViewModel(
             if (result) addingToCartResult("Product added to cart")
             else addingToCartResult("Product was not added!")
 
+        }
+    }
+
+    private fun getBadgeNumber() {
+        viewModelScope.launch {
+            _badgeNumber.value=cartRepository.getCountInCart()
         }
     }
 }

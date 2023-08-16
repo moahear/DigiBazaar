@@ -10,4 +10,12 @@ class CartRepositoryImpl(private val apiServices: ApiServices) : ICartRepository
         }
         return false
     }
+
+    override suspend fun getCountInCart(): Int {
+        val data = apiServices.getUserCart().body()
+        if (data?.success == true) return data.productList.sumOf {
+            it.quantity.toInt()
+        }
+        return 0
+    }
 }

@@ -25,6 +25,7 @@ import coil.compose.AsyncImage
 import com.gamil.moahear.digibazaar.data.model.ProductsResponse
 import com.gamil.moahear.digibazaar.navigation.Screen
 import com.gamil.moahear.digibazaar.ui.theme.Shapes
+import com.gamil.moahear.digibazaar.utils.separateDigit
 
 @Composable
 fun ProductSubject(
@@ -91,7 +92,7 @@ fun SubjectItem(product: ProductsResponse.Product, onProductClicked: (String) ->
                 )
                 Text(
                     modifier = Modifier.padding(top = 4.dp),
-                    text = "${product.price} Tomans",
+                    text = separateDigit(product.price),
                     style = TextStyle(fontSize = 14.sp)
                 )
                 Text(

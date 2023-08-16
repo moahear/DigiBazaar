@@ -16,6 +16,7 @@ import com.gamil.moahear.digibazaar.utils.Constants
 import com.gamil.moahear.digibazaar.viewmodel.CategoryViewModel
 import com.gamil.moahear.digibazaar.viewmodel.MainViewModel
 import com.gamil.moahear.digibazaar.viewmodel.ProductViewModel
+import com.gamil.moahear.digibazaar.viewmodel.ProfileViewModel
 import com.gamil.moahear.digibazaar.viewmodel.SignInViewModel
 import com.gamil.moahear.digibazaar.viewmodel.SignUpViewModel
 import org.koin.android.ext.koin.androidContext
@@ -46,9 +47,9 @@ val appModule = module {
     } bind IProductRepository::class
     single { CommentRepositoryImpl(get()) } bind ICommentRepository::class
     single { CartRepositoryImpl(get()) } bind ICartRepository::class
-    viewModel { (hasInternet: Boolean) -> MainViewModel(get(), hasInternet) }
+    viewModel { (hasInternet: Boolean) -> MainViewModel(get(), get(), hasInternet) }
     viewModel { CategoryViewModel(get()) }
     viewModel { ProductViewModel(get(), get(), get()) }
-
+    viewModel { ProfileViewModel(get(), get()) }
 
 }

@@ -6,7 +6,10 @@ object TokenInMemory {
     var userName: String? = null
         private set
 
-    fun refreshToken(userName: String?, newToken: String?) {
+    fun refreshToken(
+        userName: String?,
+        newToken: String?/*, address: String?,postalCode: String?*/
+    ) {
         this.token = newToken
         this.userName = userName
     }

@@ -1,6 +1,7 @@
 package com.gamil.moahear.digibazaar.data.source
 
 import com.gamil.moahear.digibazaar.data.model.AddCommentResponse
+import com.gamil.moahear.digibazaar.data.model.CartInfoResponse
 import com.gamil.moahear.digibazaar.data.model.CartResponse
 import com.gamil.moahear.digibazaar.data.model.CommentsResponse
 import com.gamil.moahear.digibazaar.data.model.LoginResponse
@@ -45,4 +46,7 @@ interface ApiServices {
     @FormUrlEncoded
     @POST("addToCart")
     suspend fun addToCart(@Field(value = "productId") productId: String): Response<CartResponse>
+
+    @GET("getUserCart")
+    suspend fun getUserCart(): Response<CartInfoResponse>
 }

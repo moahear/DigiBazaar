@@ -47,7 +47,7 @@ fun MainScreen(
         if (mainViewModel.isShownProgressBar.collectAsStateWithLifecycle().value) {
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth(), color = BackgroundBlue)
         }
-        TopToolBar() {
+        TopToolBar(mainViewModel.badgeNumber.collectAsStateWithLifecycle().value) {
             onNavigate(it)
         }
         CategoryTop(Constants.CATEGORIES) { category ->

@@ -22,6 +22,7 @@ class UserRepositoryImpl(
                 TokenInMemory.refreshToken(userName, it.token)
                 dataStore.saveToken(it.token)
                 dataStore.saveUsername(userName)
+                dataStore.saveLoginTime()
             }
 
             "success"
@@ -42,13 +43,12 @@ class UserRepositoryImpl(
                     TokenInMemory.refreshToken(userName, it.token)
                     dataStore.saveToken(it.token)
                     dataStore.saveUsername(userName)
+                    dataStore.saveLoginTime()
                     return "success"
-                }
-                else return  result.message()
+                } else return result.message()
             }
-             return result.message()
-        }
-        else return result.message()
+            return result.message()
+        } else return result.message()
     }
 
     override suspend fun signOut() {
