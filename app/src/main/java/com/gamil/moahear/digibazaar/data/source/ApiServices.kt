@@ -47,6 +47,10 @@ interface ApiServices {
     @POST("addToCart")
     suspend fun addToCart(@Field(value = "productId") productId: String): Response<CartResponse>
 
+    @FormUrlEncoded
+    @POST("removeFromCart")
+    suspend fun removeFromCart(@Field(value = "productId") productId: String): Response<CartResponse>
+
     @GET("getUserCart")
     suspend fun getUserCart(): Response<CartInfoResponse>
 }

@@ -62,7 +62,11 @@ fun SetUpNavGraph(navHostController: NavHostController) {
             }
         }
         composable(route = Screen.CartScreen.route) {
-            CartScreen()
+            CartScreen(
+                onBackClicked = { navHostController.popBackStack() }
+            ) {
+                navHostController.navigate(it)
+            }
         }
         composable(route = Screen.NoInternetScreen.route) {
 

@@ -13,6 +13,7 @@ import com.gamil.moahear.digibazaar.data.repository.product.ProductRepositoryImp
 import com.gamil.moahear.digibazaar.data.repository.user.IUserRepository
 import com.gamil.moahear.digibazaar.data.repository.user.UserRepositoryImpl
 import com.gamil.moahear.digibazaar.utils.Constants
+import com.gamil.moahear.digibazaar.viewmodel.CartViewModel
 import com.gamil.moahear.digibazaar.viewmodel.CategoryViewModel
 import com.gamil.moahear.digibazaar.viewmodel.MainViewModel
 import com.gamil.moahear.digibazaar.viewmodel.ProductViewModel
@@ -51,5 +52,6 @@ val appModule = module {
     viewModel { CategoryViewModel(get()) }
     viewModel { ProductViewModel(get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
+    viewModel { CartViewModel(get()) }
 
 }
