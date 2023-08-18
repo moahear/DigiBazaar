@@ -3,10 +3,12 @@ package com.gamil.moahear.digibazaar.data.source
 import com.gamil.moahear.digibazaar.data.model.AddCommentResponse
 import com.gamil.moahear.digibazaar.data.model.CartInfoResponse
 import com.gamil.moahear.digibazaar.data.model.CartResponse
+import com.gamil.moahear.digibazaar.data.model.CheckoutResponse
 import com.gamil.moahear.digibazaar.data.model.CommentsResponse
 import com.gamil.moahear.digibazaar.data.model.LoginResponse
 import com.gamil.moahear.digibazaar.data.model.ProductsResponse
 import com.gamil.moahear.digibazaar.data.model.SliderPicsResponse
+import com.gamil.moahear.digibazaar.data.model.SubmitOrderResponse
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Response
@@ -53,4 +55,12 @@ interface ApiServices {
 
     @GET("getUserCart")
     suspend fun getUserCart(): Response<CartInfoResponse>
+
+    @FormUrlEncoded
+    @POST("submitOrder")
+    suspend fun submitOrder(@Field(value = "address") address:String,@Field(value = "postalCode") postalCode:String):Response<SubmitOrderResponse>
+
+    @FormUrlEncoded
+    @POST("checkout")
+    suspend fun checkout(@Field(value = "orderId")orderId:String):Response<CheckoutResponse>
 }

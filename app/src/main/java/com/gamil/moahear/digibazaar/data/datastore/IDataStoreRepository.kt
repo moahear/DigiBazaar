@@ -16,5 +16,12 @@ interface IDataStoreRepository {
 
     suspend fun saveUsername(value: String)
     suspend fun getUserName(): String?
+
+    suspend fun saveOrderId(orderId:String)
+    suspend fun getOrderId():String
+
+    suspend fun savePaymentStatus(status:Int)
+    suspend fun getPurchaseStatus():Int
+
     suspend fun clearDataStore()
 }

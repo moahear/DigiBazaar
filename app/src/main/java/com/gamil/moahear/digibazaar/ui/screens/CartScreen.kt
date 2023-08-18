@@ -1,12 +1,20 @@
 package com.gamil.moahear.digibazaar.ui.screens
 
+import android.content.Context
+import android.content.Intent
+import android.content.res.Configuration
+import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +26,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -36,6 +45,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -51,8 +62,10 @@ import com.gamil.moahear.digibazaar.data.model.CartInfoResponse
 import com.gamil.moahear.digibazaar.navigation.Screen
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundAddToCart
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundBlueLight
+import com.gamil.moahear.digibazaar.ui.theme.BackgroundCard
 import com.gamil.moahear.digibazaar.ui.theme.BackgroundMainWhite
 import com.gamil.moahear.digibazaar.ui.theme.Shapes
+import com.gamil.moahear.digibazaar.utils.Constants
 import com.gamil.moahear.digibazaar.utils.separateDigit
 import com.gamil.moahear.digibazaar.viewmodel.CartViewModel
 import org.koin.compose.koinInject
@@ -63,10 +76,13 @@ fun CartScreen(
     onBackClicked: () -> Unit,
     onNavigate: (String) -> Unit
 ) {
+    val context = LocalContext.current
     val productsInCart by cartViewModel.productSInCart.collectAsStateWithLifecycle()
     val totalPrice by cartViewModel.totalPrice.collectAsStateWithLifecycle()
     val isChangingNumber by cartViewModel.isChangingNumber.collectAsStateWithLifecycle()
     val cartSize by cartViewModel.cartSize.collectAsStateWithLifecycle()
+    val postalCode by cartViewModel.postalCode.collectAsStateWithLifecycle()
+    val address by cartViewModel.address.collectAsStateWithLifecycle()
     var isVisibleDialog by remember {
         mutableStateOf(false)
     }
@@ -94,6 +110,102 @@ fun CartScreen(
             } else if (cartSize != -1) {
                 ShowEmptyCartAnimation()
             }
+        }
+
+        PurchaseAll(totalPrice = totalPrice.toString()) {
+            if (cartSize > 0) {
+                if (postalCode == "Click to add postal code" || address == "Click to add address") {
+                    Log.i("999", "CartScreen PurchaseAll cartSize: $cartSize")
+                    isVisibleDialog = true
+                } else {
+                    payCart(cartViewModel, address, postalCode, context)
+                }
+            } else {
+                Toast.makeText(context, "Please add some products first...", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+        if (isVisibleDialog) {
+            AddAddressDialog(
+                isShowSaveToProfile = true,
+                onDismissClickListener = {
+                    isVisibleDialog = false
+                },
+                onSubmitClickListener = { address, postalCode, isChecked ->
+                    //check internet later
+                    if (isChecked) {
+                        cartViewModel.saveAddress(address, postalCode)
+                    }
+                    payCart(cartViewModel, address, postalCode, context)
+                }
+            )
+        }
+
+    }
+}
+
+
+private fun payCart(
+    cartViewModel: CartViewModel,
+    address: String,
+    postalCode: String,
+    context: Context
+) {
+    cartViewModel.purchase(address, postalCode) { success, link ->
+        if (success) {
+            Toast.makeText(context, "Pay with zarinpal", Toast.LENGTH_SHORT)
+                .show()
+            cartViewModel.savePaymentStatus(Constants.PAYMENT_PENDING)
+            Intent(Intent.ACTION_VIEW, Uri.parse(link /*"https://zarinp.al/moahear"*/)).apply {
+                context.startActivity(this)
+            }
+        } else {
+            Toast.makeText(context, "occurred problem in zarinpal", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+}
+
+@Composable
+fun PurchaseAll(totalPrice: String, onPurchaseClickListener: () -> Unit) {
+    val configuration = LocalConfiguration.current
+    val fraction =
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 0.15f else 0.07f
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(fraction = fraction), color = BackgroundMainWhite
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Button(modifier = Modifier.padding(start = 16.dp), onClick = {
+                //check internet
+                onPurchaseClickListener()
+            }) {
+                Text(
+                    modifier = Modifier.padding(2.dp),
+                    text = "Let's purchase",
+                    style = TextStyle(
+                        color = BackgroundMainWhite,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            }
+
+            Text(
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .clip(shape = Shapes.large)
+                    .background(
+                        BackgroundCard
+                    ),
+                text = "total ${separateDigit(totalPrice)}",
+                style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Medium)
+            )
         }
     }
 }
@@ -183,7 +295,7 @@ fun CartItem(
             ) {
                 Column(modifier = Modifier.padding(12.dp)) {
                     Text(
-                        text = "From product.name group",
+                        text = "From ${product.name} group",
                         style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium)
                     )
                     Text(

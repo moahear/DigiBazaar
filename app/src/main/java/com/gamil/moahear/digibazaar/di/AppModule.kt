@@ -48,10 +48,10 @@ val appModule = module {
     } bind IProductRepository::class
     single { CommentRepositoryImpl(get()) } bind ICommentRepository::class
     single { CartRepositoryImpl(get()) } bind ICartRepository::class
-    viewModel { (hasInternet: Boolean) -> MainViewModel(get(), get(), hasInternet) }
+    viewModel { (hasInternet: Boolean) -> MainViewModel(get(),get(), get(), hasInternet) }
     viewModel { CategoryViewModel(get()) }
     viewModel { ProductViewModel(get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
-    viewModel { CartViewModel(get()) }
+    viewModel { CartViewModel(get(),get()) }
 
 }

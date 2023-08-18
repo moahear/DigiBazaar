@@ -48,4 +48,8 @@ object Constants {
         "",
         ""
     )
+    const val PAYMENT_SUCCESS = 1
+    const val PAYMENT_PENDING = 0
+    const val PAYMENT_FAIL = -1
+    const val NO_PAYMENT = -2
 }

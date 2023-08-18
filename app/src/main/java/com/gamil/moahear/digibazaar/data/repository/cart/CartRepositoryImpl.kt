@@ -1,6 +1,8 @@
 package com.gamil.moahear.digibazaar.data.repository.cart
 
 import com.gamil.moahear.digibazaar.data.model.CartInfoResponse
+import com.gamil.moahear.digibazaar.data.model.CheckoutResponse
+import com.gamil.moahear.digibazaar.data.model.SubmitOrderResponse
 import com.gamil.moahear.digibazaar.data.source.ApiServices
 
 class CartRepositoryImpl(private val apiServices: ApiServices) : ICartRepository {
@@ -21,7 +23,6 @@ class CartRepositoryImpl(private val apiServices: ApiServices) : ICartRepository
     }
 
     override suspend fun getCartInfo(): CartInfoResponse? {
-        apiServices.getUserCart().body()
         return apiServices.getUserCart().body()
     }
 
@@ -31,6 +32,14 @@ class CartRepositoryImpl(private val apiServices: ApiServices) : ICartRepository
             it.quantity.toInt()
         }
         return 0
+    }
+
+    override suspend fun submitOrder(address: String, postalCode: String): SubmitOrderResponse? {
+        return apiServices.submitOrder(address,postalCode).body()
+    }
+
+    override suspend fun checkout(orderId: String): CheckoutResponse? {
+        return apiServices.checkout(orderId).body()
     }
 }
 

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.gamil.moahear.digibazaar.data.repository.TokenInMemory
@@ -22,6 +23,8 @@ class DataStoreImpl(private val context: Context) : IDataStoreRepository {
         private const val KEY_ADDRESS = "key_address"
         private const val KEY_POSTAL_CODE = "key_postal_code"
         private const val KEY_LOGIN_TIME = "key_login_time"
+        private const val KEY_PURCHASE_STATUS = "key_purchase_status"
+        private const val KEY_ORDER_ID = "key_order_id"
     }
 
     override suspend fun loadToken() {
@@ -107,6 +110,38 @@ class DataStoreImpl(private val context: Context) : IDataStoreRepository {
         } catch (exception: Exception) {
             exception.printStackTrace()
             null
+        }
+    }
+
+    override suspend fun saveOrderId(orderId: String) {
+        context.dataStore.edit {
+            it[stringPreferencesKey(KEY_ORDER_ID)] = orderId
+        }
+    }
+
+    override suspend fun getOrderId(): String {
+        return try {
+            context.dataStore.data.first()[stringPreferencesKey(KEY_ORDER_ID)]
+                ?: "0"
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+            "0"
+        }
+    }
+
+    override suspend fun savePaymentStatus(status: Int) {
+        context.dataStore.edit {
+            it[intPreferencesKey(KEY_PURCHASE_STATUS)] = status
+        }
+    }
+
+    override suspend fun getPurchaseStatus(): Int {
+        return try {
+            context.dataStore.data.first()[intPreferencesKey(KEY_PURCHASE_STATUS)]
+                ?: Constants.NO_PAYMENT
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+            Constants.NO_PAYMENT
         }
     }
 
